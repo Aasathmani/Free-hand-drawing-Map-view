@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
-import 'ol/ol.css'; // Import OpenLayers CSS
+import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import { OSM, Vector as VectorSource } from 'ol/source';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import Draw from 'ol/interaction/Draw';
+import Feature from 'ol/Feature';
+import LineString from 'ol/geom/LineString';
 
 const App = () => {
   useEffect(() => {
@@ -38,13 +40,19 @@ const App = () => {
           type: typeSelect.value,
           freehand: true,
         });
+
+        draw.on('drawend', (event) => {
+          const geometry = event.feature.getGeometry();
+          if (geometry instanceof LineString) {
+            const coordinates = geometry.getCoordinates();
+            console.log('Waypoints:', coordinates);
+          }
+        });
+
         map.addInteraction(draw);
       }
     }
 
-    /**
-     * Handle change event.
-     */
     typeSelect.onchange = function () {
       map.removeInteraction(draw);
       addInteraction();
