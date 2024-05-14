@@ -7,6 +7,7 @@ import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import Draw from 'ol/interaction/Draw';
 import Feature from 'ol/Feature';
 import LineString from 'ol/geom/LineString';
+import Polygon from 'ol/geom/Polygon';
 
 const App = () => {
   useEffect(() => {
@@ -46,6 +47,9 @@ const App = () => {
           if (geometry instanceof LineString) {
             const coordinates = geometry.getCoordinates();
             console.log('Waypoints:', coordinates);
+          } else if (geometry instanceof Polygon) {
+            const coordinates = geometry.getCoordinates()[0]; // Get the outer ring coordinates
+            console.log('Polygon Vertices:', coordinates);
           }
         });
 
